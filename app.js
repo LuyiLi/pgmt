@@ -2,10 +2,9 @@
   "use strict";
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const config = window.PGMT_CONFIG || {};
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
-  // A single, public configuration file controls every reserved resource slot.
   for (const link of $$("[data-resource]")) {
     const value = config[link.dataset.resource];
     if (typeof value !== "string" || !value.trim()) continue;
@@ -15,96 +14,65 @@
     link.href = value;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-    link.removeAttribute("aria-disabled");
     link.removeAttribute("role");
+    link.removeAttribute("aria-disabled");
     link.classList.remove("unavailable");
     link.title = `Open ${link.dataset.resource === "bilibili" ? "Bilibili" : link.dataset.resource}`;
     $(".soon", link)?.remove();
-    const status = $(".resource-status", link);
-    if (status) status.innerHTML = `${link.dataset.resource === "paper" ? "Read PDF" : "Open resource"} <svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>`;
   }
-
-  const menu = $(".menu-toggle");
-  const navigation = $("#navigation");
-  function closeMenu() {
-    navigation.classList.remove("is-open");
-    menu.setAttribute("aria-expanded", "false");
-    menu.setAttribute("aria-label", "Open navigation");
-  }
-  menu.addEventListener("click", () => {
-    const open = navigation.classList.toggle("is-open");
-    menu.setAttribute("aria-expanded", String(open));
-    menu.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
-  });
-  navigation.addEventListener("click", event => { if (event.target.closest("a")) closeMenu(); });
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && menu.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      menu.focus();
-    }
-  });
-
-  const progress = $(".reading-progress");
-  let scrollQueued = false;
-  function updateProgress() {
-    const distance = document.documentElement.scrollHeight - window.innerHeight;
-    progress.style.transform = `scaleX(${distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0})`;
-    scrollQueued = false;
-  }
-  window.addEventListener("scroll", () => {
-    if (!scrollQueued) { scrollQueued = true; requestAnimationFrame(updateProgress); }
-  }, { passive: true });
-  window.addEventListener("resize", updateProgress, { passive: true });
-  updateProgress();
 
   if ("IntersectionObserver" in window) {
-    const sectionObserver = new IntersectionObserver(entries => {
+    const sections = new IntersectionObserver(entries => {
       for (const entry of entries) if (entry.isIntersecting) {
-        $$("nav a[href^='#']").forEach(link => {
-          const active = link.getAttribute("href") === `#${entry.target.id}`;
+        $$(".section-nav a").forEach(link => {
+          const active = link.hash === `#${entry.target.id}`;
           link.classList.toggle("active", active);
           if (active) link.setAttribute("aria-current", "location");
           else link.removeAttribute("aria-current");
         });
       }
-    }, { rootMargin: "-15% 0px -60% 0px" });
-    $$("main section[id]").forEach(section => sectionObserver.observe(section));
+    }, { rootMargin: "-10% 0px -55% 0px" });
+    $$("main>section[id]").forEach(section => sections.observe(section));
+  }
+
+  function hydrate(video) {
+    const source = $("source[data-src]", video);
+    if (source) {
+      source.src = source.dataset.src;
+      source.removeAttribute("data-src");
+      video.load();
+    }
+  }
+  function pauseOthers(current) {
+    $$("video").forEach(video => { if (video !== current) video.pause(); });
+  }
+  async function play(video) {
+    hydrate(video);
+    pauseOthers(video);
+    try { await video.play(); return true; } catch { return false; }
   }
 
   const hero = $("#hero-video");
   const heroToggle = $("#hero-toggle");
   let heroVisible = false;
-  let heroManuallyPaused = false;
-  let heroUserStarted = false;
-  function hydrateVideo(video) {
-    const source = $("source[data-src]", video);
-    if (source) { source.src = source.dataset.src; source.removeAttribute("data-src"); video.load(); }
-  }
-  async function playVideo(video) {
-    hydrateVideo(video);
-    try { await video.play(); return true; } catch { return false; }
-  }
-  function syncHeroButton() {
-    const playing = !hero.paused;
-    heroToggle.setAttribute("aria-label", playing ? "Pause background video" : "Play background video");
-    $("use", heroToggle).setAttribute("href", playing ? "#i-pause" : "#i-play");
-  }
-  function mayPlayHero() {
-    return heroVisible && !heroManuallyPaused && !document.hidden && !$("dialog[open]") &&
-      (heroUserStarted || (!reduceMotion.matches && !navigator.connection?.saveData));
+  let heroPausedByUser = false;
+  let heroStartedByUser = false;
+  function updateHeroButton() {
+    heroToggle.setAttribute("aria-label", hero.paused ? "Play teaser" : "Pause teaser");
+    $("use", heroToggle).setAttribute("href", hero.paused ? "#i-play" : "#i-pause");
   }
   function updateHero() {
-    if (mayPlayHero()) void playVideo(hero);
+    const allowed = heroVisible && !heroPausedByUser && !document.hidden && !$("dialog[open]") &&
+      !$$("video").some(video => video !== hero && !video.paused) &&
+      (heroStartedByUser || (!reduceMotion.matches && !navigator.connection?.saveData));
+    if (allowed) void play(hero);
     else hero.pause();
   }
-  hero.addEventListener("play", syncHeroButton);
-  hero.addEventListener("pause", syncHeroButton);
+  hero.addEventListener("play", updateHeroButton);
+  hero.addEventListener("pause", updateHeroButton);
   heroToggle.addEventListener("click", () => {
-    if (hero.paused) {
-      heroManuallyPaused = false;
-      heroUserStarted = true;
-      void playVideo(hero);
-    } else { heroManuallyPaused = true; hero.pause(); }
+    if (hero.paused) { heroStartedByUser = true; heroPausedByUser = false; void play(hero); }
+    else { heroPausedByUser = true; hero.pause(); }
   });
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(entries => {
@@ -114,163 +82,90 @@
   } else { heroVisible = true; updateHero(); }
   reduceMotion.addEventListener("change", updateHero);
 
-  const demonstrations = {
-    locomotion: [
-      { id: "stairs", label: "Running up stairs", duration: "0:10", title: "Taking stairs\nin stride.", text: "The policy adapts foot placement and swing clearance to traverse stairs using terrain-agnostic locomotion references.", fact: "Terrain-aware footholds" },
-      { id: "bridge", label: "Across the bridge", duration: "0:32", title: "New geometry.\nSame controller.", text: "Ascending and descending a real-world staircase with the same perceptive locomotion policy, guided by a local elevation map.", fact: "Unseen stair geometry" },
-      { id: "box", label: "Stepping onto a box", duration: "0:08", title: "A higher\nstep forward.", text: "PGMT adjusts its footholds and whole-body posture to climb an obstacle. The real-world evaluation includes boxes up to 37 cm high.", fact: "Adaptive swing clearance" },
-      { id: "grass", label: "Running on grass", duration: "0:13", title: "Out of the lab.\nOnto the grass.", text: "The same policy maintains locomotion on natural outdoor terrain, coping with vegetation and imperfect terrain observations.", fact: "Outdoor locomotion" },
-    ],
-    tracking: [
-      { id: "cartwheel", label: "Dynamic cartwheel", duration: "0:08", title: "Keep the\nwhole-body skill.", text: "Injecting terrain perception preserves the general motion prior, including highly dynamic whole-body behaviors such as cartwheels.", fact: "Dynamic motion tracking" },
-      { id: "dance", label: "Motion on uneven ground", duration: "0:17", title: "The same motion.\nA different surface.", text: "Whole-body references are executed on uneven ground while contacts and posture adapt to local terrain constraints.", fact: "Terrain-adaptive tracking" },
-    ],
-    teleoperation: [
-      { id: "teleop-stairs", label: "Teleoperation on stairs", duration: "0:17", title: "You guide.\nThe robot adapts.", text: "The operator commands upper-body motion during stair traversal. The policy handles terrain-dependent lower-body adaptation.", fact: "Locomotion + teleoperation" },
-      { id: "teleop-punch", label: "Whole-body teleoperation", duration: "0:08", title: "From human intent\nto robot motion.", text: "Whole-body motion captured through PICO is retargeted online with GMR and tracked by the same PGMT policy.", fact: "PICO + online retargeting" },
-      { id: "teleop-recovery", label: "Lie down & get up", duration: "0:10", title: "Through every\nchange of posture.", text: "Operator-commanded lying down and standing up demonstrate whole-body teleoperation across upright and ground-level postures.", fact: "Whole-body teleoperation" },
-    ],
-    recovery: [
-      { id: "recovery", label: "Disturbance & recovery", duration: "0:50", title: "Recover.\nThen carry on.", text: "After strong external disturbances, PGMT handles balance recovery and getting back up through the same policy, without a dedicated recovery controller.", fact: "Unified recovery behavior" },
-    ],
-  };
-  let activeCategory = "locomotion";
-  let activeIndex = 0;
-  const demoVideo = $("#demo-video");
-  const demoPlay = $("#demo-play");
-  const thumbnails = $("#demo-thumbnails");
+  const clips = [
+    { id: "stairs", label: "Running up stairs", category: "locomotion", duration: "0:10", text: "Terrain-aware foot placement and swing clearance adapt a flat-ground locomotion reference to stairs." },
+    { id: "bridge", label: "Ascending and descending stairs", category: "locomotion", duration: "0:32", text: "PGMT traverses an outdoor staircase using the same perceptive locomotion policy and a local elevation map." },
+    { id: "box", label: "Obstacle traversal", category: "locomotion", duration: "0:08", text: "The policy adjusts footholds and whole-body posture to climb onto a box. The evaluation includes obstacles up to 37 cm high." },
+    { id: "grass", label: "Outdoor locomotion", category: "locomotion", duration: "0:13", text: "The robot maintains locomotion on grass despite vegetation, soft support surfaces, and imperfect terrain observations." },
+    { id: "cartwheel", label: "Dynamic whole-body motion", category: "tracking", duration: "0:08", text: "Terrain perception is introduced while retaining the general motion prior, including dynamic behaviors such as cartwheels." },
+    { id: "dance", label: "Motion tracking on uneven terrain", category: "tracking", duration: "0:17", text: "The robot preserves a whole-body motion reference while adapting its contacts and posture to the local terrain." },
+    { id: "teleop-stairs", label: "Teleoperation during stair traversal", category: "teleoperation", duration: "0:17", text: "The operator controls upper-body motion while PGMT handles terrain-dependent lower-body adaptation on stairs." },
+    { id: "teleop-punch", label: "Whole-body teleoperation", category: "teleoperation", duration: "0:08", text: "Human motion captured through PICO is retargeted online with GMR and executed by the same PGMT policy." },
+    { id: "teleop-recovery", label: "Teleoperated posture transitions", category: "teleoperation", duration: "0:10", text: "Operator-commanded lying down and standing up demonstrate whole-body control across upright and ground-level postures." },
+    { id: "recovery", label: "Disturbance rejection and recovery", category: "recovery", duration: "0:50", text: "The same policy responds to external disturbances and recovers from fallen states without a dedicated recovery controller." },
+  ];
+  const highlights = ["bridge", "box", "cartwheel", "dance", "teleop-stairs", "recovery"];
+  const grid = $("#demo-grid");
   const tabs = $$("[data-category]");
-  function syncDemoButton() {
-    const playing = !demoVideo.paused;
-    demoPlay.innerHTML = `${playing ? "Pause demonstration" : "Play demonstration"} <svg class="icon" aria-hidden="true"><use href="${playing ? "#i-pause" : "#i-play"}"/></svg>`;
-  }
-  demoVideo.addEventListener("play", syncDemoButton);
-  demoVideo.addEventListener("pause", syncDemoButton);
-  demoVideo.addEventListener("error", () => {
-    $("#demo-status").textContent = "This video could not be loaded. Select another demonstration or try playing it again.";
-    demoPlay.textContent = "Retry demonstration";
-  });
-  demoPlay.addEventListener("click", () => {
-    if (demoVideo.paused) void playVideo(demoVideo);
-    else demoVideo.pause();
-  });
-  // Native player interaction hydrates the source even before the section observer runs.
-  demoVideo.addEventListener("pointerdown", () => hydrateVideo(demoVideo), { passive: true });
-  function selectClip(index, autoplay = false, announce = true) {
-    activeIndex = index;
-    const clip = demonstrations[activeCategory][index];
-    demoVideo.pause();
-    demoVideo.poster = `assets/images/${clip.id}.jpg`;
-    demoVideo.setAttribute("aria-label", clip.label);
-    demoVideo.removeAttribute("src");
-    const source = $("source", demoVideo);
-    source.src = `assets/media/${clip.id}.mp4`;
-    source.removeAttribute("data-src");
-    demoVideo.load();
-    $("#demo-title").textContent = clip.title;
-    $("#demo-copy").textContent = clip.text;
-    $(".demo-ordinal").textContent = `${String(index + 1).padStart(2, "0")} / ${String(demonstrations[activeCategory].length).padStart(2, "0")}`;
-    $("#demo-facts").replaceChildren(...[clip.fact, "Original playback speed"].map(text => {
-      const span = document.createElement("span"); span.textContent = text; return span;
-    }));
-    $$(".demo-thumb", thumbnails).forEach((button, i) => button.setAttribute("aria-pressed", String(index === i)));
-    if (announce) $("#demo-status").textContent = `${clip.label}. ${clip.text}`;
-    if (autoplay) {
-      const bounds = demoVideo.getBoundingClientRect();
-      if (bounds.top < 80 || bounds.bottom > innerHeight) demoVideo.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "center" });
-      void playVideo(demoVideo);
-    }
-  }
-  function renderThumbnails() {
-    thumbnails.replaceChildren();
-    thumbnails.dataset.count = String(demonstrations[activeCategory].length);
-    demonstrations[activeCategory].forEach((clip, index) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "demo-thumb";
-      button.setAttribute("aria-label", `Watch ${clip.label.toLowerCase()}`);
-      button.setAttribute("aria-pressed", String(index === activeIndex));
-      button.innerHTML = `<span class="thumb-image"><img src="assets/images/${clip.id}.jpg" width="480" height="270" loading="lazy" alt=""><span class="thumb-play"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span></span><span class="thumb-caption"><span>${clip.label}</span><small>${clip.duration}</small></span>`;
-      button.addEventListener("click", () => selectClip(index, true));
-      thumbnails.append(button);
+  const videoObserver = "IntersectionObserver" in window ? new IntersectionObserver(entries => {
+    for (const entry of entries) if (!entry.isIntersecting) entry.target.pause();
+  }, { threshold: 0 }) : null;
+
+  function renderCategory(category, announce = true) {
+    $$("video", grid).forEach(video => video.pause());
+    videoObserver?.disconnect();
+    const selected = category === "highlights" ? highlights.map(id => clips.find(clip => clip.id === id)) : clips.filter(clip => clip.category === category);
+    grid.replaceChildren();
+    selected.forEach(clip => {
+      const card = document.createElement("figure");
+      card.className = "demo-card";
+      card.dataset.clip = clip.id;
+      card.innerHTML = `<div class="clip-screen"><video controls muted playsinline loop preload="none" poster="assets/images/${clip.id}.jpg" aria-label="${clip.label}"><source src="assets/media/${clip.id}.mp4" type="video/mp4"></video></div><figcaption class="clip-caption"><h3>${clip.label}</h3><p>${clip.text}</p><div class="clip-footer"><span class="clip-meta">${clip.duration} &nbsp; · &nbsp; 1× speed</span><button class="clip-play" type="button" aria-label="Play ${clip.label.toLowerCase()}"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg><span>Play clip</span></button></div></figcaption>`;
+      const video = $("video", card);
+      const button = $(".clip-play", card);
+      function sync() {
+        button.setAttribute("aria-label", `${video.paused ? "Play" : "Pause"} ${clip.label.toLowerCase()}`);
+        $("use", button).setAttribute("href", video.paused ? "#i-play" : "#i-pause");
+        $("span", button).textContent = video.paused ? "Play clip" : "Pause clip";
+      }
+      video.addEventListener("play", () => { pauseOthers(video); sync(); });
+      video.addEventListener("pause", sync);
+      video.addEventListener("error", () => {
+        let error = $(".media-error", card);
+        if (!error) { error = document.createElement("p"); error.className = "media-error"; error.setAttribute("role", "status"); $("figcaption", card).append(error); }
+        error.textContent = "The clip could not be loaded. Please try again.";
+      });
+      button.addEventListener("click", () => {
+        if (video.paused) {
+          if (video.error) video.load();
+          const bounds = video.getBoundingClientRect();
+          if (bounds.top < 55 || bounds.bottom > innerHeight) video.scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth", block: "center" });
+          void play(video);
+        } else video.pause();
+      });
+      grid.append(card);
+      videoObserver?.observe(video);
     });
-  }
-  function selectCategory(category, focus = false) {
-    activeCategory = category;
-    activeIndex = 0;
     for (const tab of tabs) {
-      const selected = tab.dataset.category === category;
-      tab.setAttribute("aria-selected", String(selected));
-      tab.tabIndex = selected ? 0 : -1;
-      if (selected && focus) tab.focus();
+      const active = tab.dataset.category === category;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
     }
     $("#demo-panel").setAttribute("aria-labelledby", `tab-${category}`);
-    renderThumbnails();
-    selectClip(0, false);
+    if (announce) $("#demo-status").textContent = `${selected.length} ${category === "highlights" ? "highlight" : category} demonstrations shown.`;
   }
   tabs.forEach((tab, index) => {
-    tab.addEventListener("click", () => selectCategory(tab.dataset.category));
+    tab.addEventListener("click", () => renderCategory(tab.dataset.category));
     tab.addEventListener("keydown", event => {
       let next;
       if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
       if (event.key === "ArrowLeft") next = (index + tabs.length - 1) % tabs.length;
       if (event.key === "Home") next = 0;
       if (event.key === "End") next = tabs.length - 1;
-      if (next !== undefined) { event.preventDefault(); selectCategory(tabs[next].dataset.category, true); }
+      if (next !== undefined) { event.preventDefault(); renderCategory(tabs[next].dataset.category); tabs[next].focus(); }
     });
   });
-  renderThumbnails();
-  if ("IntersectionObserver" in window) {
-    const demoObserver = new IntersectionObserver(entries => {
-      for (const entry of entries) if (entry.isIntersecting) {
-        hydrateVideo(demoVideo);
-        demoObserver.disconnect();
-      }
-    }, { rootMargin: "200px" });
-    demoObserver.observe(demoVideo);
-    new IntersectionObserver(entries => {
-      if (!entries[0].isIntersecting) demoVideo.pause();
-    }, { threshold: 0 }).observe(demoVideo);
-  }
-
-  const benchmarkData = {
-    ours: { label: "PGMT", overall: 87.81, l9: 83.33 },
-    cnn: { label: "PGMT-CNN", overall: 87.38, l9: 80.52 },
-    noheight: { label: "PGMT-NoHeight", overall: 86.53, l9: 78.85 },
-    rgmt: { label: "RGMT reimplementation", overall: 46.68, l9: 40.52 },
-    pretrain: { label: "PGMT pretraining", overall: 40.02, l9: 35.31 },
-    sonic: { label: "SONIC v1.1 external", overall: 25.09, l9: 20.73 },
-  };
-  $$("[data-metric]").forEach(button => button.addEventListener("click", () => {
-    const metric = button.dataset.metric;
-    $$("[data-metric]").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
-    const descriptions = [];
-    $$("[data-model]").forEach(row => {
-      const data = benchmarkData[row.dataset.model];
-      const value = data[metric].toFixed(2);
-      $(".chart-bar", row).style.setProperty("--value", `${value}%`);
-      $(".chart-value", row).textContent = `${value}%`;
-      descriptions.push(`${data.label} ${value} percent`);
-    });
-    const label = `${metric === "overall" ? "Overall" : "Level 9"} completion: ${descriptions.join(", ")}.`;
-    $("#benchmark-chart").setAttribute("aria-label", label);
-    $("#metric-status").textContent = label;
-  }));
+  renderCategory("highlights", false);
 
   const videoDialog = $("#video-dialog");
-  const overviewVideo = $("#overview-video");
+  const overview = $("#overview-video");
   const figureDialog = $("#figure-dialog");
   function openDialog(dialog) {
-    closeMenu();
-    hero.pause();
-    demoVideo.pause();
+    $$("video").forEach(video => video.pause());
     dialog.showModal();
     document.body.classList.add("dialog-open");
   }
-  $$("[data-open-video]").forEach(button => button.addEventListener("click", () => {
-    openDialog(videoDialog);
-    void playVideo(overviewVideo);
-  }));
+  $$("[data-open-video]").forEach(button => button.addEventListener("click", () => { openDialog(videoDialog); void play(overview); }));
   $("#zoom-method").addEventListener("click", () => openDialog(figureDialog));
   $$("dialog").forEach(dialog => {
     $("[data-close-dialog]", dialog).addEventListener("click", () => dialog.close());
@@ -280,12 +175,12 @@
     });
     dialog.addEventListener("close", () => {
       if (!$("dialog[open]")) document.body.classList.remove("dialog-open");
-      overviewVideo.pause();
+      overview.pause();
       updateHero();
     });
   });
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) { hero.pause(); demoVideo.pause(); overviewVideo.pause(); }
+    if (document.hidden) $$("video").forEach(video => video.pause());
     else updateHero();
   });
 
@@ -300,12 +195,12 @@
       field.style.cssText = "position:fixed;left:-9999px;top:0";
       document.body.append(field);
       field.select();
-      try { copied = document.execCommand("copy"); } catch { /* Manual selection remains available. */ }
+      try { copied = document.execCommand("copy"); } catch { /* Keep the citation selectable. */ }
       field.remove();
       copyButton.focus();
     }
     $("span", copyButton).textContent = copied ? "Copied!" : "Select to copy";
-    $("#copy-status").textContent = copied ? "BibTeX citation copied to clipboard." : "Automatic copying is unavailable. Select and copy the BibTeX text below.";
+    $("#copy-status").textContent = copied ? "BibTeX citation copied to clipboard." : "Select and copy the BibTeX text below.";
     if (!copied) {
       const range = document.createRange();
       range.selectNodeContents($("#bibtex"));
@@ -313,6 +208,6 @@
       selection.removeAllRanges(); selection.addRange(range);
     }
     clearTimeout(copyTimer);
-    copyTimer = setTimeout(() => { $("span", copyButton).textContent = "Copy BibTeX"; }, 2500);
+    copyTimer = setTimeout(() => { $("span", copyButton).textContent = "Copy"; }, 2500);
   });
 })();

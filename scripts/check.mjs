@@ -7,6 +7,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'styles.css'), 'utf8');
 const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
+assert(!/benchmark-chart|data-metric|full-results|chart-row/.test(html + app), 'Quantitative comparison section must remain removed');
+assert(!/\d+(?:\.\d+)?\s*%/.test(html.replace(/<[^>]+>/g, '')), 'Do not display experiment percentages');
 const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
 assert.equal(new Set(ids).size, ids.length, 'HTML IDs must be unique');
 const refs = [...html.matchAll(/(?:href|src|data-src|poster)="([^"]+)"/g)].map(match => match[1]);

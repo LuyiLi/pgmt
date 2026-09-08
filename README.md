@@ -29,7 +29,7 @@ window.PGMT_CONFIG = Object.freeze({
 });
 ```
 
-把空字符串替换为公开 URL，首页和资源区会一起启用对应按钮。留空时显示 Coming soon，不会跳转到无关页面。`code` 指论文实现仓库，不是网页源码仓库。
+把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。`code` 指论文实现仓库，不是网页源码仓库。
 
 arXiv 发布后，也请在 `index.html` 的 BibTeX 中补上真实标识。当前使用 `@misc` 项目引用，未声称论文已被会议或期刊接收。
 
@@ -61,11 +61,13 @@ node scripts/build.mjs
 - `assets/paper/pgmt.pdf`：提供的论文副本。
 - `assets/images/method.png`：直接从论文 Figure 2 提取的最新版架构图。
 - `assets/images/real-world-overview.png`：原始实机拼图，用作社交分享封面。
+- `assets/images/affiliations.png`：提供的“图片4.png”学校、机构与实验室标识，保持原图比例。
 - `assets/media/hero.mp4`：`Teaser.mp4` 压缩版。
 - `assets/media/overview.mp4`：`视频终稿.mp4` 的完整压缩版，保留原声。
-- 其他片段选自“筛选素材”，以原速展示，不加速。短演示去掉环境音，仅在点击播放或明确选择后播放；首屏背景视频静音循环。
-- 仿真数字来自 Table II。与 Perceptive BFM 的引用结果单独注记，不混入匹配评测图表。
-- 保留图中模型名称，并明确 SONIC 使用外部 checkpoint、RGMT 为本文复现。
+- 其他片段选自“筛选素材”，以原速展示，不加速。短演示去掉环境音，在点击后播放；首屏 teaser 静音循环，保留完整画幅。
+- 页面参照 [TAGA 学术项目主页](https://marmotlab.github.io/taga-humanoid/) 的信息组织方式，使用白底、无衬线完整论文标题、作者与机构标识、摘要、方法图、实机视频和 BibTeX。
+- 根据作者要求，页面不展示实验完成率、百分比对比、基线柱状图或基线数据表；论文 PDF 保持原文件。
+- 演示区默认展示六段精选视频，采用两列布局；可按 locomotion、motion tracking、teleoperation 和 recovery 筛选。点击新视频时会暂停其他视频。
 
 ### 视频选段
 
@@ -84,8 +86,8 @@ node scripts/build.mjs
 | recovery | Track Fall.MP4 | 25–75 s |
 | overview | 视频终稿.mp4 | 全长 |
 
-页面支持手机导航、键盘方向键切换视频分类、架构图放大、原生视频全屏、BibTeX 复制、减少动态效果偏好和后台视频暂停。所有资源均本地托管，无统计追踪或外部字体请求。
+页面支持响应式页内导航、键盘方向键切换视频分类、架构图放大、原生视频全屏、BibTeX 复制、减少动态效果偏好和后台视频暂停。所有资源均本地托管，无统计追踪或外部字体请求。
 
 ## 文件与授权
 
-论文、图片和视频的权利归原作者所有；此仓库不额外授予素材再利用许可。字体 DM Sans 和 Instrument Serif 通过 Fontsource 获取，使用 SIL Open Font License，许可证包含在 `assets/fonts/`。网页的 Code 链接预留给论文实现；本网站不包含训练代码。
+论文、图片和视频的权利归原作者所有；此仓库不额外授予素材再利用许可。当前页面仅使用 DM Sans 字体（通过 Fontsource 获取，SIL Open Font License）；字体资源与许可证包含在 `assets/fonts/`。网页的 Code 链接预留给论文实现；本网站不包含训练代码。
