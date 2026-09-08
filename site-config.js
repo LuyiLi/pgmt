@@ -3,7 +3,6 @@
 window.PGMT_CONFIG = Object.freeze({
   paper: "assets/paper/pgmt.pdf",
   arxiv: "",
-  code: "",
   bilibili: "https://www.bilibili.com/video/BV1dzbx6kEhQ/",
   siteUrl: "https://luyili.github.io/pgmt/",
 });

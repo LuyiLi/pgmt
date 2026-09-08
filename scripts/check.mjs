@@ -26,6 +26,6 @@ const sandbox = { window: {} };
 vm.runInNewContext(fs.readFileSync(path.join(root, 'site-config.js'), 'utf8'), sandbox);
 const config = sandbox.window.PGMT_CONFIG;
 assert(config.siteUrl === 'https://luyili.github.io/pgmt/', 'Unexpected deployment target');
-for (const name of ['paper', 'arxiv', 'code', 'bilibili']) assert.equal(typeof config[name], 'string');
+for (const name of ['paper', 'arxiv', 'bilibili']) assert.equal(typeof config[name], 'string');
 for (const file of fs.readdirSync(path.join(root, 'assets/media'))) assert(fs.statSync(path.join(root, 'assets/media', file)).size < 100 * 1024 * 1024, `Video exceeds GitHub file limit: ${file}`);
 console.log(`PASS: ${new Set(refs).size} local/anchor references; ${clipIds.length} demo pairs; unique IDs; resource configuration; media sizes.`);

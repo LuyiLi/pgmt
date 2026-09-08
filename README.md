@@ -15,7 +15,7 @@ node scripts/serve.mjs
 
 打开 <http://127.0.0.1:4173/pgmt/>。预览服务器支持视频 Range 请求，可正常拖动进度条。
 
-## 填写 arXiv、B 站与代码链接
+## 填写论文与视频链接
 
 只需修改 `site-config.js`：
 
@@ -23,13 +23,12 @@ node scripts/serve.mjs
 window.PGMT_CONFIG = Object.freeze({
   paper: "assets/paper/pgmt.pdf",
   arxiv: "",
-  code: "",
   bilibili: "https://www.bilibili.com/video/BV1dzbx6kEhQ/",
   siteUrl: "https://luyili.github.io/pgmt/",
 });
 ```
 
-B 站链接已接入提供的终稿视频。其他链接发布后，把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。`code` 指论文实现仓库，不是网页源码仓库。
+B 站链接已接入提供的终稿视频。arXiv 发布后，把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。
 
 arXiv 发布后，也请在 `index.html` 的 BibTeX 中补上真实标识。当前使用 `@misc` 项目引用，未声称论文已被会议或期刊接收。
 
@@ -96,4 +95,4 @@ node scripts/build.mjs
 
 ## 文件与授权
 
-论文、图片和视频的权利归原作者所有；此仓库不额外授予素材再利用许可。当前页面仅使用 DM Sans 字体（通过 Fontsource 获取，SIL Open Font License）；字体资源与许可证包含在 `assets/fonts/`。网页的 Code 链接预留给论文实现；本网站不包含训练代码。
+论文、图片和视频的权利归原作者所有；此仓库不额外授予素材再利用许可。当前页面仅使用 DM Sans 字体（通过 Fontsource 获取，SIL Open Font License）；字体资源与许可证包含在 `assets/fonts/`。本网站不包含训练代码。
