@@ -2,7 +2,8 @@
 
 Academic project page for **PGMT: Perceptive General Motion Tracking for Humanoid Robots**.
 
-Repository: <https://github.com/LuyiLi/pgmt>  
+Repository: <https://github.com/LuyiLi/pgmt>
+
 Public URL: <https://luyili.github.io/pgmt/>
 
 ## 本地预览
