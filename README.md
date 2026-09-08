@@ -2,8 +2,8 @@
 
 Academic project page for **PGMT: Perceptive General Motion Tracking for Humanoid Robots**.
 
-Intended repository: `LuyiLi/pgmt`  
-Intended public URL: <https://luyili.github.io/pgmt/>
+Repository: <https://github.com/LuyiLi/pgmt>  
+Public URL: <https://luyili.github.io/pgmt/>
 
 ## 本地预览
 
@@ -37,10 +37,13 @@ arXiv 发布后，也请在 `index.html` 的 BibTeX 中补上真实标识。当�
 
 ## 发布到 GitHub Pages
 
-1. 用 `LuyiLi` 账号创建公开仓库 `pgmt`，将本文件所在目录的内容提交到 `main`。
-2. 仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
-3. 推送到 `main`，或在 Actions 中手动运行 **Deploy PGMT to GitHub Pages**。
-4. 等待工作流成功，即可访问 <https://luyili.github.io/pgmt/>。
+仓库 `LuyiLi/pgmt` 已启用 Pages，发布来源为 **GitHub Actions**。
+
+1. 将网页修改提交并推送到 `main`，自动触发 **Deploy PGMT to GitHub Pages**。
+2. 也可在 Actions 中选择该工作流，点击 **Run workflow**，分支选择 `main`。
+3. 等待工作流成功，即可访问 <https://luyili.github.io/pgmt/>。
+
+若在其他仓库首次部署，需要先进入 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。`Configure Pages` 返回 404 通常表示该仓库还未启用 Pages；完成设置后重新运行工作流即可。
 
 已提供 `.github/workflows/deploy.yml`，只发布 `_site/` 中的网页文件，不会发布开发脚本。参考 [GitHub 官方 Pages 工作流文档](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 
