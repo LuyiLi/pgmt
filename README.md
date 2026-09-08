@@ -24,12 +24,12 @@ window.PGMT_CONFIG = Object.freeze({
   paper: "assets/paper/pgmt.pdf",
   arxiv: "",
   code: "",
-  bilibili: "",
+  bilibili: "https://www.bilibili.com/video/BV1dzbx6kEhQ/",
   siteUrl: "https://luyili.github.io/pgmt/",
 });
 ```
 
-把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。`code` 指论文实现仓库，不是网页源码仓库。
+B 站链接已接入提供的终稿视频。其他链接发布后，把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。`code` 指论文实现仓库，不是网页源码仓库。
 
 arXiv 发布后，也请在 `index.html` 的 BibTeX 中补上真实标识。当前使用 `@misc` 项目引用，未声称论文已被会议或期刊接收。
 
@@ -62,7 +62,7 @@ node scripts/build.mjs
 - `assets/images/method.png`：直接从论文 Figure 2 提取的最新版架构图。
 - `assets/images/real-world-overview.png`：原始实机拼图，用作社交分享封面。
 - `assets/images/affiliations.png`：提供的“图片4.png”学校、机构与实验室标识，保持原图比例。
-- `assets/media/hero.mp4`：`Teaser.mp4` 压缩版。
+- `assets/media/hero.mp4`：从 `视频终稿.mp4` 截取开头 0–13.7 秒，与原网页 preview 时长一致；封面同步取自终稿。1440 × 810、30 fps、H.264，静音循环。
 - `assets/media/overview.mp4`：`视频终稿.mp4` 的完整压缩版，保留原声。
 - 其他片段选自“筛选素材”，以原速展示，不加速。短演示去掉环境音，在点击后播放；首屏 teaser 静音循环，保留完整画幅。
 - 页面参照 [TAGA 学术项目主页](https://marmotlab.github.io/taga-humanoid/) 的信息组织方式，使用白底、无衬线完整论文标题、作者与机构标识、摘要、方法图、实机视频和 BibTeX。
@@ -73,7 +73,7 @@ node scripts/build.mjs
 
 | 网页素材 | 原文件 | 时间段 |
 | --- | --- | --- |
-| hero | Teaser.mp4 | 0–13.7 s |
+| hero | 视频终稿.mp4 | 0–13.7 s |
 | stairs | Locomotion stair run up.mp4 | 8–18 s |
 | bridge | Locomotion Bridge.mp4 | 8–40 s |
 | box | Locomotion Box.mp4 | 全长 |
@@ -87,6 +87,12 @@ node scripts/build.mjs
 | overview | 视频终稿.mp4 | 全长 |
 
 页面支持响应式页内导航、键盘方向键切换视频分类、架构图放大、原生视频全屏、BibTeX 复制、减少动态效果偏好和后台视频暂停。所有资源均本地托管，无统计追踪或外部字体请求。
+
+### GitHub 素材大小
+
+网站只包含压缩后的 MP4，不包含约 647 MiB 的原始终稿。所有网站文件均低于 GitHub 普通 Git 提交的 100 MiB 单文件限制，无需 Git LFS；视频使用 H.264 / yuv420p，并启用 faststart，适合网页播放。
+
+完整视频 `overview.mp4` 约 29.6 MiB，因此请按上方说明通过 Git 推送网站。GitHub 网页上传另有 25 MiB 单文件限制；参见 [GitHub 文件大小文档](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github)。
 
 ## 文件与授权
 
