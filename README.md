@@ -23,12 +23,15 @@ node scripts/serve.mjs
 window.PGMT_CONFIG = Object.freeze({
   paper: "assets/paper/pgmt.pdf",
   arxiv: "",
+  youtube: "https://youtu.be/nXjA07c3eBc",
   bilibili: "https://www.bilibili.com/video/BV1dzbx6kEhQ/",
   siteUrl: "https://luyili.github.io/pgmt/",
 });
 ```
 
-B 站链接已接入提供的终稿视频。arXiv 发布后，把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。
+顶部 Video 按钮通过 `youtube` 配置在新标签页打开 YouTube；Bilibili 按钮通过 `bilibili` 配置打开 B 站。两个视频链接均已接入。首屏保留短预览，Watch the full video 按钮播放本站的完整视频。
+
+arXiv 发布后，把空字符串替换为公开 URL，首页会启用对应按钮。留空时显示 soon，不会跳转到无关页面。
 
 arXiv 发布后，也请在 `index.html` 的 BibTeX 中补上真实标识。当前使用 `@misc` 项目引用，未声称论文已被会议或期刊接收。
 

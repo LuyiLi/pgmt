@@ -3,6 +3,7 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const config = window.PGMT_CONFIG || {};
+  const resourceLabels = { paper: "paper", arxiv: "arXiv", youtube: "YouTube", bilibili: "Bilibili" };
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)");
 
   for (const link of $$("[data-resource]")) {
@@ -17,7 +18,7 @@
     link.removeAttribute("role");
     link.removeAttribute("aria-disabled");
     link.classList.remove("unavailable");
-    link.title = `Open ${link.dataset.resource === "bilibili" ? "Bilibili" : link.dataset.resource}`;
+    link.title = `Open ${resourceLabels[link.dataset.resource] || link.dataset.resource}`;
     $(".soon", link)?.remove();
   }
 
