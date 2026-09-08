@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f8f4">
+  <meta name="description" content="PGMT brings general humanoid motion tracking beyond flat ground. One perceptive policy for terrain-adaptive locomotion, whole-body motion, teleoperation, and recovery on Unitree G1.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="PGMT — Perceptive General Motion Tracking">
+  <meta property="og:description" content="Human motion. Real-world terrain. A unified perceptive policy for humanoid robots.">
+  <meta property="og:url" content="https://luyili.github.io/pgmt/">
+  <meta property="og:image" content="https://luyili.github.io/pgmt/assets/images/real-world-overview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://luyili.github.io/pgmt/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script src="site-config.js" defer></script>
+  <script src="app.js" defer></script>
+  <title>PGMT — Perceptive General Motion Tracking for Humanoid Robots</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12"/></symbol>
+    <symbol id="i-paper" viewBox="0 0 24 24"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8Zm0 0v5h5M9 13h6m-6 4h6"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 16"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="3"/><path d="m7 2 4 5m6-5-4 5M8 12v4m8-4v4"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="nav-wrap container">
+      <a class="brand" href="#" aria-label="PGMT home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>PGMT<span class="brand-dot">.</span></a>
+      <button class="menu-toggle icon-button" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="navigation"><svg class="icon"><use href="#i-menu"/></svg></button>
+      <nav id="navigation" aria-label="Main navigation">
+        <a href="#overview">Overview</a><a href="#demonstrations">In the wild</a><a href="#method">Method</a><a href="#results">Results</a>
+        <a class="nav-paper" href="assets/paper/pgmt.pdf" target="_blank" rel="noopener">Read the paper <svg class="icon"><use href="#i-external"/></svg></a>
+      </nav>
+    </div>
+    <div class="reading-progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <section class="hero container" aria-labelledby="paper-title">
+      <p class="eyebrow hero-eyebrow"><span class="status-dot"></span> HUMANOID ROBOTICS <span class="eyebrow-divider">/</span> RESEARCH PROJECT 2026</p>
+      <div class="title-lockup">
+        <span class="hero-acronym" aria-hidden="true">PGMT<span>.</span></span>
+        <div class="title-rule" aria-hidden="true"></div>
+        <h1 id="paper-title"><span class="sr-only">PGMT: </span>Perceptive General<br>Motion Tracking<br><span class="title-last">for Humanoid Robots</span></h1>
+      </div>
+      <div class="authors" aria-label="Paper authors">
+        <span>Hongyi Li<sup>1</sup></span><span>Peizhuo Li<sup>2</sup></span><span>Yucheng Tao<sup>1</sup></span><span>Ze Wang<sup>1</sup></span><span>Fangzhou Xu<sup>2</sup></span><span>Jinyi Chen<sup>1</sup></span><span>Yanyan Yuan<sup>3</sup></span><span>Dapeng Jia<sup>2</sup></span><span>Yongbin Jin<sup>3,†</sup></span><span>Mingfeng Fan<sup>2,†</sup></span><span>Guillaume Sartoretti<sup>2</sup></span><span>Hongtao Wang<sup>1,3,‡</sup></span>
+      </div>
+      <div class="affiliations"><span><sup>1</sup> Zhejiang University</span><span><sup>2</sup> National University of Singapore</span><span><sup>3</sup> MirrorMe Technology</span></div>
+      <p class="author-notes">† Corresponding authors &nbsp; ‡ Project lead</p>
+      <div class="resource-buttons" aria-label="Project resources">
+        <a class="button button-primary" href="assets/paper/pgmt.pdf" data-resource="paper" target="_blank" rel="noopener"><svg class="icon"><use href="#i-paper"/></svg>Paper <span class="button-detail">PDF</span></a>
+        <a class="button unavailable" data-resource="arxiv" role="link" aria-disabled="true" title="arXiv link coming soon"><span class="arxiv-icon" aria-hidden="true">χ</span>arXiv<span class="soon">SOON</span></a>
+        <a class="button unavailable" data-resource="code" role="link" aria-disabled="true" title="Research code link coming soon"><svg class="icon"><use href="#i-code"/></svg>Code<span class="soon">SOON</span></a>
+        <a class="button unavailable" data-resource="bilibili" role="link" aria-disabled="true" title="Bilibili link coming soon"><svg class="icon"><use href="#i-tv"/></svg>Bilibili<span class="soon">SOON</span></a>
+      </div>
+
+      <figure class="hero-figure">
+        <div class="hero-film">
+          <video id="hero-video" muted loop playsinline preload="none" poster="assets/images/hero.jpg" aria-label="PGMT highlights: terrain traversal, whole-body motions, teleoperation, and recovery">
+            <source data-src="assets/media/hero.mp4" type="video/mp4">
+          </video>
+          <div class="film-shade" aria-hidden="true"></div>
+          <span class="film-label"><span class="status-dot"></span> ONE POLICY. REAL-WORLD DEPLOYMENT.</span>
+          <div class="film-title"><span>Human motion.</span><em>Real-world terrain.</em></div>
+          <div class="film-actions">
+            <button type="button" class="watch-button" data-open-video><svg class="icon"><use href="#i-play"/></svg><span>Watch the film <small>2:22</small></span></button>
+            <button type="button" id="hero-toggle" class="icon-button film-pause" aria-label="Play background video"><svg class="icon"><use href="#i-play"/></svg></button>
+          </div>
+        </div>
+        <figcaption><span><span class="caption-index">FIG. 01</span> From flat-ground motion intent to terrain-aware whole-body control.</span><a href="#demonstrations">Explore demonstrations <svg class="icon"><use href="#i-arrow"/></svg></a></figcaption>
+      </figure>
+    </section>
+
+    <section class="overview section container" id="overview" aria-labelledby="overview-title">
+      <div class="section-heading"><p class="eyebrow"><span class="section-number">01</span> THE IDEA</p><h2 id="overview-title">General motion tracking,<br><em>beyond flat ground.</em></h2></div>
+      <div class="overview-copy"><p class="lead">A motion reference tells the robot <em>what</em> to do. Perception tells it <em>how</em> to do it here.</p><p>PGMT turns terrain-agnostic motion commands into physically feasible whole-body behavior. By learning from independently selected motions and terrains, a single policy adapts its footholds, swing trajectories, and posture while preserving the intended motion.</p><details class="abstract"><summary>Read the abstract <span aria-hidden="true">+</span></summary><p>Humanoid motion trackers can reproduce diverse whole-body motions, but their performance degrades on complex terrain where terrain-agnostic references become physically infeasible. We present PGMT, a Perceptive General Motion Tracking pipeline for humanoid robots that learns terrain adaptation from independently selected motion references and terrains. PGMT first learns a general tracking and recovery prior, then incorporates terrain perception through motion-conditioned terrain glimpses that selectively encode regions relevant to the current motion. Terrain-aware tracking relaxation allows necessary deviations from the reference while preserving its motion intent. Zero-shot deployment on a Unitree G1 demonstrates robust terrain-adaptive locomotion and whole-body motion execution over real-world terrain with obstacles up to 37 cm high, while supporting teleoperation, dynamic motion tracking, and fall recovery. PGMT extends general humanoid motion tracking beyond flat ground, providing a unified policy for terrain-adaptive locomotion, diverse whole-body behaviors, and teleoperation in complex environments.</p></details></div>
+      <div class="stat-strip">
+        <div class="stat"><span class="stat-number">1<span> policy</span></span><span class="stat-label">Locomotion, tracking & teleoperation</span></div>
+        <div class="stat"><span class="stat-number">37<span> cm</span></span><span class="stat-label">Real-world obstacle height</span></div>
+        <div class="stat"><span class="stat-number">29<span> DoF</span></span><span class="stat-label">Unitree G1 humanoid</span></div>
+        <div class="stat"><span class="stat-number">Zero-shot</span><span class="stat-label">Simulation-to-real deployment</span></div>
+      </div>
+    </section>
+
+    <section class="demonstrations section" id="demonstrations" aria-labelledby="demos-title">
+      <div class="container">
+        <div class="section-topline"><div><p class="eyebrow"><span class="section-number">02</span> IN THE WILD</p><h2 id="demos-title">One policy. <em>Many possibilities.</em></h2></div><p class="section-intro">Different terrains. Different command sources.<br>The same policy, without switching controllers.</p></div>
+        <div class="demo-tabs" role="tablist" aria-label="Demonstration category">
+          <button id="tab-locomotion" type="button" role="tab" aria-selected="true" aria-controls="demo-panel" data-category="locomotion"><span>01</span>Terrain locomotion</button>
+          <button id="tab-tracking" type="button" role="tab" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-category="tracking"><span>02</span>Whole-body tracking</button>
+          <button id="tab-teleoperation" type="button" role="tab" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-category="teleoperation"><span>03</span>Teleoperation</button>
+          <button id="tab-recovery" type="button" role="tab" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-category="recovery"><span>04</span>Recovery</button>
+        </div>
+        <div id="demo-panel" role="tabpanel" aria-labelledby="tab-locomotion">
+          <div class="demo-stage">
+            <div class="demo-screen"><video id="demo-video" controls muted playsinline loop preload="none" poster="assets/images/stairs.jpg" aria-label="Running up stairs"><source src="assets/media/stairs.mp4" type="video/mp4"></video></div>
+            <div class="demo-description"><p class="eyebrow"><span class="status-dot"></span> UNITREE G1 · REAL WORLD</p><span class="demo-ordinal" aria-hidden="true">01 / 04</span><h3 id="demo-title">Taking stairs<br>in stride.</h3><p id="demo-copy">The policy adapts foot placement and swing clearance to traverse stairs using terrain-agnostic locomotion references.</p><div class="demo-facts" id="demo-facts"><span>Terrain-aware footholds</span><span>Original playback speed</span></div><button class="text-button" type="button" id="demo-play">Play demonstration <svg class="icon"><use href="#i-play"/></svg></button></div>
+          </div>
+          <div class="demo-thumbnails" id="demo-thumbnails" aria-label="Choose a demonstration"></div>
+          <p class="demo-status sr-only" id="demo-status" role="status" aria-live="polite"></p>
+        </div>
+        <noscript><p class="no-script-note">Enable JavaScript to switch demonstrations, or <a href="assets/media/overview.mp4">watch the complete project film</a>.</p></noscript>
+      </div>
+    </section>
+
+    <section class="method section container" id="method" aria-labelledby="method-title">
+      <div class="section-topline"><div><p class="eyebrow"><span class="section-number">03</span> THE METHOD</p><h2 id="method-title">Learn to move.<br><em>Then learn where to step.</em></h2></div><p class="section-intro">A general tracking prior, progressively extended<br>with motion-conditioned terrain perception.</p></div>
+      <div class="training-stages"><article><span class="stage-index">STAGE 01</span><div><h3>Build the motion prior</h3><p>Learn diverse whole-body tracking and fall recovery on flat ground, using a motion-intent fusion module and a split-return critic.</p></div></article><div class="stage-connector" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></div><article><span class="stage-index">STAGE 02</span><div><h3>Inject terrain perception</h3><p>Add local terrain glimpses, terrain-contact objectives, and tracking relaxation to adapt motion to complex terrain.</p></div></article></div>
+      <figure class="method-figure"><button type="button" class="figure-zoom" id="zoom-method" aria-label="Enlarge the PGMT architecture figure"><img src="assets/images/method.png" width="1480" height="591" loading="lazy" alt="PGMT architecture. Tracking pretraining establishes a motion prior. In perception injection, a terrain-glimpse encoder selects four local patches from a height scan. The Intent Fusion Module combines history, future motion commands, and terrain tokens for an actor and multi-head critic."><span class="zoom-label"><svg class="icon"><use href="#i-expand"/></svg> View architecture</span></button><figcaption><span class="caption-index">FIG. 02</span> The PGMT training pipeline and progressively extensible policy architecture.</figcaption></figure>
+      <div class="method-features"><article><span class="feature-number">01 / PERCEIVE</span><h3>Look where motion matters.</h3><p>Four learned terrain glimpses focus on local geometry relevant to the current state and upcoming motion, instead of encoding every region equally.</p></article><article><span class="feature-number">02 / FUSE</span><h3>Connect intent and terrain.</h3><p>Cross-attention brings robot history, future motion references, and terrain tokens into a shared motion-intent representation.</p></article><article><span class="feature-number">03 / ADAPT</span><h3>Preserve intent. Allow adaptation.</h3><p>Terrain-aware relaxation permits necessary lower-body deviations while maintaining strict upper-body tracking objectives.</p></article></div>
+      <div class="method-takeaway"><span class="eyebrow">THE KEY DISTINCTION</span><p>Learn terrain adaptation <em>inside the tracking policy</em>, directly from unpaired motion and terrain data.</p></div>
+    </section>
+
+    <section class="results section" id="results" aria-labelledby="results-title"><div class="container">
+      <div class="section-topline"><div><p class="eyebrow"><span class="section-number">04</span> THE EVIDENCE</p><h2 id="results-title">Measured in simulation.<br><em>Demonstrated in the real world.</em></h2></div><p class="section-intro">Five terrain families. Ten difficulty levels.<br>9,600 matched 30-second episodes per policy.</p></div>
+      <div class="results-layout">
+        <div class="result-summary"><div class="result-big"><span>87.81<span>%</span></span><h3>Overall completion</h3><p>Across all evaluated terrains and difficulty levels.</p></div><div class="result-secondary"><strong>83.33<span>%</span></strong><div><h3>At the highest difficulty</h3><p>Completion over 960 Level 9 episodes.</p></div></div><a class="text-link" href="assets/paper/pgmt.pdf#page=6" target="_blank" rel="noopener">Full results in Table II <svg class="icon"><use href="#i-external"/></svg></a></div>
+        <div class="benchmark"><div class="benchmark-heading"><h3>Completion on complex terrain</h3><div class="metric-switch" role="group" aria-label="Benchmark metric"><button type="button" data-metric="overall" aria-pressed="true">Overall</button><button type="button" data-metric="l9" aria-pressed="false">Level 9</button></div></div>
+          <div class="chart" id="benchmark-chart" role="img" aria-label="Overall completion: PGMT 87.81 percent, PGMT-CNN 87.38 percent, PGMT-NoHeight 86.53 percent, RGMT reimplementation 46.68 percent, PGMT pretraining 40.02 percent, SONIC v1.1 external 25.09 percent.">
+            <div class="chart-row ours" data-model="ours"><span class="chart-name">PGMT <small>OURS</small></span><div class="chart-track"><span class="chart-bar" style="--value:87.81%"></span></div><strong class="chart-value">87.81%</strong></div>
+            <div class="chart-row" data-model="cnn"><span class="chart-name">PGMT-CNN</span><div class="chart-track"><span class="chart-bar" style="--value:87.38%"></span></div><strong class="chart-value">87.38%</strong></div>
+            <div class="chart-row" data-model="noheight"><span class="chart-name">PGMT-NoHeight</span><div class="chart-track"><span class="chart-bar" style="--value:86.53%"></span></div><strong class="chart-value">86.53%</strong></div>
+            <div class="chart-divider"><span>Flat-only trackers evaluated on terrain</span></div>
+            <div class="chart-row baseline" data-model="rgmt"><span class="chart-name">RGMT-Reimpl.</span><div class="chart-track"><span class="chart-bar" style="--value:46.68%"></span></div><strong class="chart-value">46.68%</strong></div>
+            <div class="chart-row baseline" data-model="pretrain"><span class="chart-name">PGMT-Pretrain</span><div class="chart-track"><span class="chart-bar" style="--value:40.02%"></span></div><strong class="chart-value">40.02%</strong></div>
+            <div class="chart-row baseline" data-model="sonic"><span class="chart-name">SONIC v1.1 <sup>†</sup></span><div class="chart-track"><span class="chart-bar" style="--value:25.09%"></span></div><strong class="chart-value">25.09%</strong></div>
+            <div class="chart-axis" aria-hidden="true"><span>0</span><span>25</span><span>50</span><span>75</span><span>100%</span></div>
+          </div><p class="chart-note">Selected comparisons from Table II. Completion = reaching the 30 s horizon without early termination. † External checkpoint, evaluated with a re-audited adapter and its native controller.</p><p id="metric-status" class="sr-only" aria-live="polite"></p>
+        </div>
+      </div>
+      <details class="full-results"><summary>See all evaluated policies <span aria-hidden="true">+</span></summary><div class="table-scroll"><table><caption>Table II · Simulation evaluation. Higher completion is better; lower tracking error is better.</caption><thead><tr><th scope="col">Policy</th><th scope="col">Overall (%) ↑</th><th scope="col">L9 (%) ↑</th><th scope="col">Body pos. (m) ↓</th><th scope="col">Joint RMSE (rad) ↓</th></tr></thead><tbody><tr><th scope="row">PGMT-Pretrain</th><td>40.02</td><td>35.31</td><td>0.0897</td><td>0.2957</td></tr><tr><th scope="row">RGMT-Reimpl.</th><td>46.68</td><td>40.52</td><td>0.0700</td><td>0.2251</td></tr><tr><th scope="row">SONIC v1.1 External †</th><td>25.09</td><td>20.73</td><td>0.1204</td><td>0.2650</td></tr><tr><th scope="row">Perceptive BFM *</th><td>55.1</td><td>—</td><td>—</td><td>—</td></tr><tr><th scope="row">PGMT-NoHeight</th><td>86.53</td><td>78.85</td><td>0.0659</td><td>0.2937</td></tr><tr><th scope="row">PGMT-CNN</th><td>87.38</td><td>80.52</td><td>0.0645</td><td>0.2397</td></tr><tr><th scope="row">PGMT-2Glimpse</th><td>85.17</td><td>77.71</td><td>0.0676</td><td>0.2340</td></tr><tr><th scope="row">PGMT-Fixed</th><td>86.38</td><td>79.58</td><td>0.0645</td><td>0.2461</td></tr><tr class="table-ours"><th scope="row">PGMT (ours)</th><td>87.81</td><td>83.33</td><td>0.0678</td><td>0.2299</td></tr></tbody></table></div><p class="chart-note">* Perceptive BFM is quoted from its original paper and is not a matched evaluation in this work. † External checkpoint. See the paper for full evaluation and training-cost details.</p></details>
+      <div class="deployment-note"><span class="eyebrow">ONBOARD DEPLOYMENT</span><p>29-DoF Unitree G1 <span>+</span> Livox Mid-360S LiDAR <span>+</span> NVIDIA Jetson Orin NX</p><span>Perception and control on a single onboard computer.</span></div>
+    </div></section>
+
+    <section class="resources section container" id="resources" aria-labelledby="resources-title">
+      <div class="section-topline"><div><p class="eyebrow"><span class="section-number">05</span> EXPLORE THE WORK</p><h2 id="resources-title">The paper, <em>and beyond.</em></h2></div><p class="section-intro">Read the details. Watch the experiments.<br>Build on the ideas.</p></div>
+      <div class="resource-grid"><a class="resource-card" href="assets/paper/pgmt.pdf" data-resource="paper" target="_blank" rel="noopener"><svg class="icon"><use href="#i-paper"/></svg><h3>Research paper</h3><p>Method, experiments & ablations</p><span class="resource-status">Read PDF <svg class="icon"><use href="#i-external"/></svg></span></a><a class="resource-card unavailable" data-resource="arxiv" role="link" aria-disabled="true"><span class="arxiv-icon" aria-hidden="true">χ</span><h3>arXiv</h3><p>Preprint & publication details</p><span class="resource-status">Coming soon</span></a><a class="resource-card unavailable" data-resource="code" role="link" aria-disabled="true"><svg class="icon"><use href="#i-code"/></svg><h3>Code</h3><p>Implementation & project resources</p><span class="resource-status">Coming soon</span></a><a class="resource-card unavailable" data-resource="bilibili" role="link" aria-disabled="true"><svg class="icon"><use href="#i-tv"/></svg><h3>Bilibili</h3><p>Watch & share the project video</p><span class="resource-status">Coming soon</span></a></div>
+      <div class="citation-block"><div class="citation-heading"><div><p class="eyebrow">CITATION</p><h3>If you find this work useful.</h3></div><button type="button" class="button copy-button" id="copy-citation"><svg class="icon"><use href="#i-copy"/></svg><span>Copy BibTeX</span></button></div><pre><code id="bibtex">@misc{li2026pgmt,
+  title   = {PGMT: Perceptive General Motion Tracking for Humanoid Robots},
+  author  = {Li, Hongyi and Li, Peizhuo and Tao, Yucheng and Wang, Ze and
+             Xu, Fangzhou and Chen, Jinyi and Yuan, Yanyan and Jia, Dapeng and
+             Jin, Yongbin and Fan, Mingfeng and Sartoretti, Guillaume and Wang, Hongtao},
+  year    = {2026},
+  url     = {https://luyili.github.io/pgmt/}
+}</code></pre><p class="citation-note">Project citation. The arXiv identifier will be added when available.</p><span class="sr-only" id="copy-status" role="status"></span></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-inner"><div><a class="brand" href="#">PGMT<span class="brand-dot">.</span></a><p>Human motion. Real-world terrain.</p></div><div class="footer-affiliations"><span>Center of X-Mechanics · Zhejiang University</span><span>MARMot Lab · National University of Singapore</span><span>MirrorMe Technology</span></div><a class="back-top" href="#">Back to top <span aria-hidden="true">↑</span></a></div><div class="container footer-bottom"><span>© 2026 PGMT Authors</span><span>Perceptive General Motion Tracking for Humanoid Robots</span></div></footer>
+
+  <dialog class="video-dialog" id="video-dialog" aria-labelledby="video-dialog-title"><div class="dialog-heading"><h2 id="video-dialog-title">PGMT · Project film</h2><button type="button" class="icon-button" data-close-dialog aria-label="Close video"><svg class="icon"><use href="#i-close"/></svg></button></div><video id="overview-video" controls playsinline preload="none" poster="assets/images/hero.jpg" aria-label="Complete PGMT project film"><source data-src="assets/media/overview.mp4" type="video/mp4"></video><p class="dialog-caption">Terrain-adaptive locomotion, dynamic whole-body motion, teleoperation, and recovery with a single policy.</p></dialog>
+  <dialog class="figure-dialog" id="figure-dialog" aria-labelledby="figure-dialog-title"><div class="dialog-heading"><h2 id="figure-dialog-title">PGMT · Policy architecture</h2><button type="button" class="icon-button" data-close-dialog aria-label="Close architecture figure"><svg class="icon"><use href="#i-close"/></svg></button></div><div class="large-figure"><img src="assets/images/method.png" width="1480" height="591" alt="Enlarged PGMT training pipeline and policy architecture"></div><p class="dialog-caption">Figure 2 from the paper. On a small screen, scroll horizontally to inspect the details.</p></dialog>
+</body>
+</html>

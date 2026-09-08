@@ -1,0 +1,13 @@
+{
+  "name": "pgmt-project-page",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Academic project website for PGMT: Perceptive General Motion Tracking for Humanoid Robots",
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node --check app.js && node --check site-config.js && node scripts/check.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
