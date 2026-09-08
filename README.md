@@ -61,8 +61,8 @@ node scripts/build.mjs
 - `assets/images/method.png`：直接从论文 Figure 2 提取的最新版架构图。
 - `assets/images/real-world-overview.png`：原始实机拼图，用作社交分享封面。
 - `assets/images/affiliations.png`：提供的“图片4.png”学校、机构与实验室标识，保持原图比例。
-- `assets/media/hero.mp4`：从 `视频终稿.mp4` 截取开头 0–13.7 秒，与原网页 preview 时长一致；封面同步取自终稿。1440 × 810、30 fps、H.264，静音循环。
-- `assets/media/overview.mp4`：`视频终稿.mp4` 的完整压缩版，保留原声。
+- `assets/media/hero.mp4`：从最新版 `终稿3.mp4`（2026-09-07 导出）截取开头 0–13.7 秒，与原网页 preview 时长一致；封面同步取自该版本。1440 × 810、30 fps、H.264，静音循环。
+- `assets/media/overview.mp4`：同一版 `终稿3.mp4` 的完整压缩版，保留原声。
 - 其他片段选自“筛选素材”，以原速展示，不加速。短演示去掉环境音，在点击后播放；首屏 teaser 静音循环，保留完整画幅。
 - 页面参照 [TAGA 学术项目主页](https://marmotlab.github.io/taga-humanoid/) 的信息组织方式，使用白底、无衬线完整论文标题、作者与机构标识、摘要、方法图、实机视频和 BibTeX。
 - 根据作者要求，页面不展示实验完成率、百分比对比、基线柱状图或基线数据表；论文 PDF 保持原文件。
@@ -72,7 +72,7 @@ node scripts/build.mjs
 
 | 网页素材 | 原文件 | 时间段 |
 | --- | --- | --- |
-| hero | 视频终稿.mp4 | 0–13.7 s |
+| hero | 终稿3.mp4 | 0–13.7 s |
 | stairs | Locomotion stair up.mp4 | 全长，约 28.8 s |
 | bridge | Locomotion stair up down turn.mp4 | 全长，约 12.1 s |
 | box | Locomotion Box.mp4 | 全长 |
@@ -83,7 +83,7 @@ node scripts/build.mjs
 | teleop-punch | Teleop Punch.mp4 | 全长 |
 | teleop-recovery | Teleop laydown and getup.mp4 | 全长 |
 | recovery | Track Fall.MP4 | 25–75 s |
-| overview | 视频终稿.mp4 | 全长 |
+| overview | 终稿3.mp4 | 全长 |
 
 页面支持响应式页内导航、键盘方向键切换视频分类、架构图放大、原生视频全屏、BibTeX 复制、减少动态效果偏好和后台视频暂停。所有资源均本地托管，无统计追踪或外部字体请求。
 
