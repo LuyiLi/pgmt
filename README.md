@@ -73,7 +73,7 @@ node scripts/build.mjs
 | 网页素材 | 原文件 | 时间段 |
 | --- | --- | --- |
 | hero | 视频终稿.mp4 | 0–13.7 s |
-| stairs | Locomotion stair run up.mp4 | 8–18 s |
+| stairs | Locomotion stair up.mp4 | 全长，约 28.8 s |
 | bridge | Locomotion stair up down turn.mp4 | 全长，约 12.1 s |
 | box | Locomotion Box.mp4 | 全长 |
 | grass | Locomotion Grass Run.mp4 | 全长 |

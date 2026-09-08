@@ -83,7 +83,7 @@
   reduceMotion.addEventListener("change", updateHero);
 
   const clips = [
-    { id: "stairs", label: "Running up stairs", category: "locomotion", duration: "0:10", text: "Terrain-aware foot placement and swing clearance adapt a flat-ground locomotion reference to stairs." },
+    { id: "stairs", label: "Running up stairs", category: "locomotion", duration: "0:29", text: "Terrain-aware foot placement and swing clearance adapt a flat-ground locomotion reference to stairs." },
     { id: "bridge", label: "Ascending and descending stairs", category: "locomotion", duration: "0:12", text: "PGMT ascends, turns, and descends an outdoor staircase using the same perceptive locomotion policy." },
     { id: "box", label: "Obstacle traversal", category: "locomotion", duration: "0:08", text: "The policy adjusts footholds and whole-body posture to climb onto a box. The evaluation includes obstacles up to 37 cm high." },
     { id: "grass", label: "Outdoor locomotion", category: "locomotion", duration: "0:13", text: "The robot maintains locomotion on grass despite vegetation, soft support surfaces, and imperfect terrain observations." },
